@@ -49,10 +49,33 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ssToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showBullseyeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showBullseyeLowerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.missilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fireTwoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fireTwoToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.fireThreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.launchAllFourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.soundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.noneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playQuickSoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playMediumSoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playFullSoundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -93,7 +116,7 @@
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(117, 30);
             this.trackBar2.TabIndex = 19;
-            this.trackBar2.Value = 1;
+            this.trackBar2.Value = 10;
             // 
             // button7
             // 
@@ -196,13 +219,17 @@
             // 
             // videoSourcePlayer
             // 
-            this.videoSourcePlayer.Location = new System.Drawing.Point(13, 13);
+            this.videoSourcePlayer.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.videoSourcePlayer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.videoSourcePlayer.Location = new System.Drawing.Point(12, 24);
             this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(362, 291);
+            this.videoSourcePlayer.Size = new System.Drawing.Size(360, 280);
             this.videoSourcePlayer.TabIndex = 11;
             this.videoSourcePlayer.Text = "videoSourcePlayer";
             this.videoSourcePlayer.VideoSource = null;
-            this.videoSourcePlayer.NewFrame += new AForge.Controls.VideoSourcePlayer.NewFrameHandler(this.VideoSourcePlayer1_NewFrame);
+            this.videoSourcePlayer.NewFrame += new AForge.Controls.VideoSourcePlayer.NewFrameHandler(this.VideoSourcePlayer_NewFrame);
+            this.videoSourcePlayer.MouseLeave += new System.EventHandler(this.VideoSourcePlayer_MouseLeave);
+            this.videoSourcePlayer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.VideoSourcePlayer_MouseMove);
             // 
             // checkBox1
             // 
@@ -262,8 +289,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 307);
+            this.toolStripStatusLabel2,
+            this.toolStripStatusLabel3});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 313);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(522, 22);
             this.statusStrip1.TabIndex = 22;
@@ -283,12 +311,182 @@
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(50, 17);
             this.toolStripStatusLabel2.Text = "Y : 0";
             // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(39, 17);
+            this.toolStripStatusLabel3.Text = "Ready";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.optionsToolStripMenuItem,
+            this.missilesToolStripMenuItem,
+            this.soundsToolStripMenuItem,
+            this.helpToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(522, 24);
+            this.menuStrip1.TabIndex = 23;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ssToolStripMenuItem,
+            this.showBullseyeToolStripMenuItem,
+            this.showBullseyeLowerToolStripMenuItem,
+            this.toolStripSeparator1});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.optionsToolStripMenuItem.Text = "Aim";
+            // 
+            // ssToolStripMenuItem
+            // 
+            this.ssToolStripMenuItem.Checked = true;
+            this.ssToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ssToolStripMenuItem.Name = "ssToolStripMenuItem";
+            this.ssToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.ssToolStripMenuItem.Text = "Show Crosshairs";
+            // 
+            // showBullseyeToolStripMenuItem
+            // 
+            this.showBullseyeToolStripMenuItem.Checked = true;
+            this.showBullseyeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showBullseyeToolStripMenuItem.Name = "showBullseyeToolStripMenuItem";
+            this.showBullseyeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.showBullseyeToolStripMenuItem.Text = "Show Bullseye";
+            // 
+            // showBullseyeLowerToolStripMenuItem
+            // 
+            this.showBullseyeLowerToolStripMenuItem.Checked = true;
+            this.showBullseyeLowerToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showBullseyeLowerToolStripMenuItem.Name = "showBullseyeLowerToolStripMenuItem";
+            this.showBullseyeLowerToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.showBullseyeLowerToolStripMenuItem.Text = "Show Bullseye (Lower)";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(189, 6);
+            // 
+            // missilesToolStripMenuItem
+            // 
+            this.missilesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fireTwoToolStripMenuItem,
+            this.fireTwoToolStripMenuItem1,
+            this.fireThreeToolStripMenuItem,
+            this.launchAllFourToolStripMenuItem});
+            this.missilesToolStripMenuItem.Name = "missilesToolStripMenuItem";
+            this.missilesToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.missilesToolStripMenuItem.Text = "Missiles";
+            // 
+            // fireTwoToolStripMenuItem
+            // 
+            this.fireTwoToolStripMenuItem.Checked = true;
+            this.fireTwoToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.fireTwoToolStripMenuItem.Name = "fireTwoToolStripMenuItem";
+            this.fireTwoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fireTwoToolStripMenuItem.Text = "Launch one";
+            // 
+            // fireTwoToolStripMenuItem1
+            // 
+            this.fireTwoToolStripMenuItem1.Name = "fireTwoToolStripMenuItem1";
+            this.fireTwoToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.fireTwoToolStripMenuItem1.Text = "Launch two";
+            // 
+            // fireThreeToolStripMenuItem
+            // 
+            this.fireThreeToolStripMenuItem.Name = "fireThreeToolStripMenuItem";
+            this.fireThreeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fireThreeToolStripMenuItem.Text = "Launch three";
+            // 
+            // launchAllFourToolStripMenuItem
+            // 
+            this.launchAllFourToolStripMenuItem.Name = "launchAllFourToolStripMenuItem";
+            this.launchAllFourToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.launchAllFourToolStripMenuItem.Text = "Launch four";
+            this.launchAllFourToolStripMenuItem.Click += new System.EventHandler(this.LaunchAllFourToolStripMenuItem_Click);
+            // 
+            // soundsToolStripMenuItem
+            // 
+            this.soundsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.noneToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.playQuickSoundToolStripMenuItem,
+            this.playMediumSoundToolStripMenuItem,
+            this.playFullSoundToolStripMenuItem});
+            this.soundsToolStripMenuItem.Name = "soundsToolStripMenuItem";
+            this.soundsToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.soundsToolStripMenuItem.Text = "Sounds";
+            // 
+            // noneToolStripMenuItem
+            // 
+            this.noneToolStripMenuItem.Checked = true;
+            this.noneToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
+            this.noneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.noneToolStripMenuItem.Text = "None";
+            // 
+            // playQuickSoundToolStripMenuItem
+            // 
+            this.playQuickSoundToolStripMenuItem.Name = "playQuickSoundToolStripMenuItem";
+            this.playQuickSoundToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.playQuickSoundToolStripMenuItem.Text = "Play quick sound";
+            // 
+            // playMediumSoundToolStripMenuItem
+            // 
+            this.playMediumSoundToolStripMenuItem.Name = "playMediumSoundToolStripMenuItem";
+            this.playMediumSoundToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.playMediumSoundToolStripMenuItem.Text = "Play medium sound";
+            // 
+            // playFullSoundToolStripMenuItem
+            // 
+            this.playFullSoundToolStripMenuItem.Name = "playFullSoundToolStripMenuItem";
+            this.playFullSoundToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.playFullSoundToolStripMenuItem.Text = "Play full sound";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(522, 329);
+            this.ClientSize = new System.Drawing.Size(522, 335);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.btnFire);
@@ -297,6 +495,7 @@
             this.Controls.Add(this.videoSourcePlayer);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.RightToLeftLayout = true;
@@ -309,6 +508,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -336,6 +537,28 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ssToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showBullseyeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showBullseyeLowerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem missilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fireTwoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fireTwoToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem fireThreeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem launchAllFourToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem soundsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem playQuickSoundToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playMediumSoundToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playFullSoundToolStripMenuItem;
     }
 }
 
