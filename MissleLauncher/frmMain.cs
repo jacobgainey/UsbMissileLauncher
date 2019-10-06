@@ -7,22 +7,36 @@ using System.Windows.Forms;
 
 namespace MissleLauncher
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
+        private int NumberOfMissiles = 1;
         private CommandCenter launcher = new CommandCenter(new ThunderMissileLauncher());
 
-        enum Direction { Up, Down, Left, Right }
+        private enum Direction
+        { Up, Down, Left, Right }
 
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
+            toolStripStatusLabel5.Text = $@"Firing {NumberOfMissiles} Missile(s)";
         }
 
         #region ------------------------------------------------------------ Form Events
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadCamera();
+            // enumerate video devices
+            var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+            for (int i = 0; i < videoDevices.Count; i++)
+            {
+                videoToolStripMenuItem.DropDownItems.Add(videoDevices[i].Name);
+            }
+
+            ToolStripMenuItem tsitem = (ToolStripMenuItem)videoToolStripMenuItem.DropDownItems[0];
+            tsitem.Checked = true;
+
+            LoadCamera(0);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -100,13 +114,49 @@ namespace MissleLauncher
 
         private void BtnFire_Click(object sender, EventArgs e)
         {
-            var launcher = new CommandCenter(new ThunderMissileLauncher());
-            launcher.Fire(trackBar1.Value);
+            FireMissile();
         }
 
         #endregion ------------------------------------------------------------ Button Events
 
-        #region ------------------------------------------------------------ Player Events
+        #region --------------------------------------------------------------- Toolbar Events
+
+        private void TsMenuItemAim_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsitem = (ToolStripMenuItem)sender;
+            tsitem.Checked = !tsitem.Checked;
+        }
+
+        private void TsMenuItemMissiles_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsitem;
+            foreach (var item in missilesToolStripMenuItem.DropDownItems)
+            {
+                tsitem = (ToolStripMenuItem)item;
+                tsitem.Checked = false;
+            }
+            tsitem = (ToolStripMenuItem)sender;
+            tsitem.Checked = true;
+
+            NumberOfMissiles = Convert.ToInt32(tsitem.Tag);
+            toolStripStatusLabel5.Text = $@"Firing {NumberOfMissiles} Missile(s)";
+        }
+
+        private void TsMenuItemSounds_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsitem;
+            foreach (var item in soundsToolStripMenuItem.DropDownItems)
+            {
+                tsitem = (ToolStripMenuItem)item;
+                tsitem.Checked = false;
+            }
+            tsitem = (ToolStripMenuItem)sender;
+            tsitem.Checked = true;
+        }
+
+        #endregion --------------------------------------------------------------- Toolbar Events
+
+        #region --------------------------------------------------------------- Player Events
 
         private void VideoSourcePlayer_MouseMove(object sender, MouseEventArgs e)
         {
@@ -155,17 +205,19 @@ namespace MissleLauncher
 
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                if (checkBox1.Checked)
+                if (tsMenuItemCrosshairs.Checked)
                 {
                     graphics.DrawLine(Yellow, new Point(w / 2, 0), new Point(w / 2, h));
                     graphics.DrawLine(Yellow, new Point(0, h / 2), new Point(w, h / 2));
                 }
-                if (checkBox2.Checked)
+                if (tsMenuItemBullseye.Checked)
                 {
                     graphics.DrawEllipse(Green, new Rectangle((w / 2) - 27, (h / 2) - 27, 55, 55));
                     graphics.DrawEllipse(Green, new Rectangle((w / 2) - 38, (h / 2) - 38, 77, 77));
                     graphics.DrawEllipse(Green, new Rectangle((w / 2) - 49, (h / 2) - 49, 99, 99));
-
+                }
+                if (tsMenuItemBullseyeL.Checked)
+                {
                     graphics.DrawEllipse(Red, new Rectangle((w / 2) - 27, h - 50 - 27, 55, 55));
                     graphics.DrawEllipse(Red, new Rectangle((w / 2) - 38, h - 50 - 38, 77, 77));
                     graphics.DrawEllipse(Red, new Rectangle((w / 2) - 49, h - 50 - 49, 99, 99));
@@ -173,9 +225,41 @@ namespace MissleLauncher
             }
         }
 
-        #endregion ------------------------------------------------------------ Player Events
+        #endregion --------------------------------------------------------------- Player Events
 
-        #region ------------------------------------------------------------ Methods
+        #region --------------------------------------------------------------- Methods
+
+        private void FireMissile()
+        {
+            int missileCount = NumberOfMissiles;
+            foreach (var item in missilesToolStripMenuItem.DropDownItems)
+            {
+                ToolStripMenuItem tsitem = (ToolStripMenuItem)item;
+                if (tsitem.Checked)
+                {
+                    missileCount = Convert.ToInt32(tsitem.Tag);
+                }
+            }
+            launcher.Fire(missileCount);
+
+            if (tsMenuItemPlay1.Checked) PlaySoundEffect("");
+            if (tsMenuItemPlay2.Checked) PlaySoundEffect("");
+            if (tsMenuItemPlay3.Checked) PlaySoundEffect("");
+        }
+
+        private void PlaySoundEffect(string path)
+        {
+            try
+            {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer();
+                player.SoundLocation = path;
+                player.Play();
+            }
+            catch (Exception ex)
+            {
+                HandleExecptions(ex);
+            }
+        }
 
         private void SmoothMove(int distance, Direction direction)
         {
@@ -187,15 +271,19 @@ namespace MissleLauncher
                     case Direction.Up:
                         launcher.Up(100);
                         break;
+
                     case Direction.Down:
                         launcher.Down(100);
                         break;
+
                     case Direction.Left:
                         launcher.Left(100);
                         break;
+
                     case Direction.Right:
                         launcher.Right(100);
                         break;
+
                     default:
                         break;
                 }
@@ -208,26 +296,41 @@ namespace MissleLauncher
             toolStripStatusLabel3.Text = $@"Ready";
         }
 
-        private void LoadCamera()
+        private void LoadCamera(int index)
         {
-            // enumerate video devices
-            var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            // create video source
-            VideoCaptureDevice videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
-            // start the video source
-            videoSource.Start();
-            OpenVideoSource(videoSource);
+            try
+            {
+                // enumerate video devices
+                var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+                VideoCaptureDevice videoCaptureDevice = new VideoCaptureDevice(videoDevices[index].MonikerString);
+
+                videoCaptureDevice.Start();
+                OpenVideoSource(videoCaptureDevice);
+                toolStripStatusLabel4.Text = videoDevices[index].Name;
+            }
+            catch (Exception ex)
+            {
+                HandleExecptions(ex);
+            }
         }
 
         // Open video source
         private void OpenVideoSource(IVideoSource source)
         {
-            // stop current video source
-            CloseCurrentVideoSource();
+            try
+            {
+                // stop current video source
+                CloseCurrentVideoSource();
 
-            // start new video source
-            videoSourcePlayer.VideoSource = source;
-            videoSourcePlayer.Start();
+                // start new video source
+                videoSourcePlayer.VideoSource = source;
+                videoSourcePlayer.Start();
+            }
+            catch (Exception ex)
+            {
+                HandleExecptions(ex);
+            }
         }
 
         // Close video source if it is running
@@ -254,16 +357,24 @@ namespace MissleLauncher
             }
         }
 
-        #endregion ------------------------------------------------------------ Methods
-
-        private void ToolStripComboBox1_Click(object sender, EventArgs e)
+        private void HandleExecptions(Exception ex)
         {
-
+            try
+            {
+                MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch
+            {
+                //
+            }
         }
 
-        private void LaunchAllFourToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        #endregion --------------------------------------------------------------- Methods
 
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmAbout frm = new frmAbout();
+            frm.Show(this);
         }
     }
 }
