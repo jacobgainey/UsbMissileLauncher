@@ -13,21 +13,23 @@ body {
 }
 
 .header {
+    line-height: 3px;
     margin: auto;
     width: 400px;
-    height: 25px;
 }
 
 .camera {
     margin: auto;
     border: 2px solid darkgreen;
     background-color: #565252;
+    color: yellow;
     width: 400px;
     height: 400px;
 }
 
 .controls {
     margin: auto;
+    border: 2px solid darkgreen;
+    background-color: #000;
     width: 400px;
-    height: 50px;
 }
