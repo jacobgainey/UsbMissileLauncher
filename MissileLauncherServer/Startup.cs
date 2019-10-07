@@ -1,10 +1,15 @@
-﻿using Microsoft.Owin;
+﻿using AForge.Video;
+using AForge.Video.DirectShow;
+using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
+using MissileLauncherServer.Streaming;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Owin;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net.Http.Formatting;
 using System.Web.Http;
@@ -13,6 +18,9 @@ namespace MissileLauncherServer
 {
     public class Startup
     {
+        private static ImageStreamingServer _server;
+        private static Image _image;
+
         // This code configures Web API. The Startup class is specified as a type
         // parameter in the WebApp.Start method.
         public void Configuration(IAppBuilder appBuilder)
@@ -55,6 +63,34 @@ namespace MissileLauncherServer
             // Put it all together
             appBuilder.UseWebApi(config);
             appBuilder.UseFileServer(fileServerOptions);
+
+            // start web cam server
+            StartWebCamServer();
+        }
+
+        private void StartWebCamServer()
+        {
+            var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            VideoCaptureDevice videoCaptureDevice = new VideoCaptureDevice(videoDevices[0].MonikerString);
+            videoCaptureDevice.NewFrame += new NewFrameEventHandler(VideoCaptureDevice_NewFrame);
+            videoCaptureDevice.Start();
+
+            _server = new ImageStreamingServer(GetImages()) { ImagesSource = GetImages() };
+            _server.Start(Convert.ToInt32(9001));
+        }
+
+        public static void VideoCaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            Bitmap img = (Bitmap)eventArgs.Frame.Clone();
+            _image = img;
+        }
+
+        public static IEnumerable<Image> GetImages()
+        {
+            while (true)
+            {
+                yield return _image;
+            }
         }
     }
 }

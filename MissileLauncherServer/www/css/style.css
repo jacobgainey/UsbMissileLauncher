@@ -33,3 +33,31 @@ body {
     background-color: #000;
     width: 400px;
 }
+
+.outsideWrapper {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    padding: 0px;
+}
+
+.insideWrapper {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    padding: 0px;
+}
+
+.coveredImage {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 0px;
+}
+
+.coveringCanvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 0px;
+}
